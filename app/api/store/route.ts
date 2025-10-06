@@ -1,44 +1,87 @@
-import { currentUser } from "@clerk/nextjs/server"
-import { prisma } from "@/lib/prisma"
+import { auth } from "@clerk/nextjs/server"
+import { supabase } from "@/lib/supabase"
 import { NextResponse } from "next/server"
 
 export async function GET() {
-  const userObj = await currentUser()
-  if (!userObj) return new NextResponse("Unauthorized", { status: 401 })
-  let user = await prisma.user.findUnique({ where: { clerkId: userObj.id }, include: { store: true } })
+  const { userId } = await auth();
+  if (!userId) return new NextResponse("Unauthorized", { status: 401 });
+
+  const { data: user } = await supabase
+    .from("users")
+    .select("id")
+    .eq("clerk_id", userId)
+    .maybeSingle();
+
   if (!user) {
-    user = await prisma.user.create({ data: { clerkId: userObj.id, email: userObj.emailAddresses?.[0]?.emailAddress ?? "" } })
+    return NextResponse.json(null);
   }
-  return NextResponse.json(user.store ?? null)
+
+  const { data: store } = await supabase
+    .from("stores")
+    .select("*")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  return NextResponse.json(store);
 }
 
 export async function PUT(req: Request) {
-  const userObj = await currentUser()
-  if (!userObj) return new NextResponse("Unauthorized", { status: 401 })
-  const data = await req.json()
-  let user = await prisma.user.findUnique({ where: { clerkId: userObj.id } })
+  const { userId } = await auth();
+  if (!userId) return new NextResponse("Unauthorized", { status: 401 });
+
+  const data = await req.json();
+
+  const { data: user } = await supabase
+    .from("users")
+    .select("id")
+    .eq("clerk_id", userId)
+    .maybeSingle();
+
   if (!user) {
-    user = await prisma.user.create({ data: { clerkId: userObj.id, email: userObj.emailAddresses?.[0]?.emailAddress ?? data.email ?? "" } })
+    return new NextResponse("User not found", { status: 404 });
   }
-  const store = await prisma.store.upsert({
-    where: { userId: user.id },
-    update: {
-      name: data.name,
-      username: data.username,
-      bio: data.bio ?? null,
-      logoUrl: data.logoUrl ?? null,
-      whatsappNumber: data.whatsappNumber ?? null,
-    },
-    create: {
-      userId: user.id,
-      name: data.name,
-      username: data.username,
-      bio: data.bio ?? null,
-      logoUrl: data.logoUrl ?? null,
-      whatsappNumber: data.whatsappNumber ?? null,
-    },
-  })
-  return NextResponse.json(store)
+
+  const { data: existingStore } = await supabase
+    .from("stores")
+    .select("id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  let store;
+
+  if (existingStore) {
+    const { data: updated } = await supabase
+      .from("stores")
+      .update({
+        name: data.name,
+        username: data.username,
+        bio: data.bio || null,
+        logo_url: data.logoUrl || null,
+        whatsapp_number: data.whatsappNumber || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", user.id)
+      .select()
+      .single();
+    store = updated;
+  } else {
+    const { data: created } = await supabase
+      .from("stores")
+      .insert({
+        user_id: user.id,
+        name: data.name,
+        username: data.username,
+        bio: data.bio || null,
+        logo_url: data.logoUrl || null,
+        whatsapp_number: data.whatsappNumber || null,
+        plan: "FREE",
+      })
+      .select()
+      .single();
+    store = created;
+  }
+
+  return NextResponse.json(store);
 }
 
 

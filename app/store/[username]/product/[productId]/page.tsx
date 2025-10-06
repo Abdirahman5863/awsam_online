@@ -2,6 +2,7 @@ import { ProductDetail } from "@/components/storefront/product-detail"
 import { StorefrontHeader } from "@/components/storefront/storefront-header"
 import { StorefrontFooter } from "@/components/storefront/storefront-footer"
 import { notFound } from "next/navigation"
+import { supabase } from "@/lib/supabase"
 
 interface ProductPageProps {
   params: {
@@ -10,62 +11,53 @@ interface ProductPageProps {
   }
 }
 
-// Mock data - in real app this would come from database
-const getProductData = (username: string, productId: string) => {
-  const stores = {
-    demo: {
-      name: "Demo Store",
-      username: "demo",
-      bio: "Premium lifestyle products for the modern creator.",
-      avatar: "/diverse-user-avatars.png",
+async function getProductData(username: string, productId: string) {
+  const { data: store } = await supabase
+    .from("stores")
+    .select("*")
+    .eq("username", username)
+    .maybeSingle();
+
+  if (!store) return null;
+
+  const { data: product } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", productId)
+    .eq("store_id", store.id)
+    .maybeSingle();
+
+  if (!product) return null;
+
+  return {
+    store: {
+      name: store.name,
+      username: store.username,
+      bio: store.bio || "",
+      avatar: store.logo_url || "/placeholder-user.jpg",
       theme: {
         primaryColor: "oklch(0.7 0.15 142)",
         backgroundColor: "oklch(0.08 0 0)",
       },
-      socialLinks: {
-        instagram: "https://instagram.com/demo",
-        twitter: "https://twitter.com/demo",
-        website: "https://demo.com",
-      },
-      products: [
-        {
-          id: 1,
-          name: "Premium T-Shirt",
-          price: 29.99,
-          image: "/plain-white-tshirt.png",
-          description:
-            "High-quality cotton t-shirt with custom design. Made from 100% organic cotton for ultimate comfort and durability.",
-          images: ["/plain-white-tshirt.png", "/t-shirt-product.jpg"],
-          sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-          colors: ["White", "Black", "Gray"],
-          inStock: true,
-        },
-        {
-          id: 2,
-          name: "Designer Hoodie",
-          price: 59.99,
-          image: "/cozy-hoodie.png",
-          description: "Comfortable hoodie with premium materials. Perfect for casual wear and staying cozy.",
-          images: ["/cozy-hoodie.png", "/cozy-hoodie-display.png"],
-          sizes: ["S", "M", "L", "XL", "XXL"],
-          colors: ["Gray", "Black", "Navy"],
-          inStock: true,
-        },
-      ],
+      socialLinks: {},
+      whatsappNumber: store.whatsapp_number || undefined,
     },
-  }
-
-  const store = stores[username as keyof typeof stores]
-  if (!store) return null
-
-  const product = store.products.find((p) => p.id === Number.parseInt(productId))
-  if (!product) return null
-
-  return { store, product }
+    product: {
+      id: product.id,
+      name: product.name,
+      price: product.price_cents / 100,
+      image: product.image_url || "/placeholder.jpg",
+      description: product.description || "",
+      images: [product.image_url || "/placeholder.jpg"],
+      sizes: [],
+      colors: [],
+      inStock: true,
+    },
+  };
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const data = getProductData(params.username, params.productId)
+export default async function ProductPage({ params }: ProductPageProps) {
+  const data = await getProductData(params.username, params.productId)
 
   if (!data) {
     notFound()

@@ -13,7 +13,7 @@ export function ProductsManager() {
   const [searchQuery, setSearchQuery] = useState("")
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
-  const [products, setProducts] = useState<Array<{ id: string; name: string; description?: string; priceCents: number; imageUrl?: string }>>([])
+  const [products, setProducts] = useState<Array<{ id: string; name: string; description?: string; price_cents: number; image_url?: string }>>([])
   const [form, setForm] = useState({ name: "", price: "", description: "", imageUrl: "" })
   const [saving, setSaving] = useState(false)
 
@@ -120,7 +120,7 @@ export function ProductsManager() {
               >
                 <div className="flex items-center space-x-4">
                   <img
-                    src={product.imageUrl || "/placeholder.svg"}
+                    src={product.image_url || "/placeholder.svg"}
                     alt={product.name}
                     className="w-16 h-16 rounded-lg object-cover bg-muted"
                   />
@@ -131,7 +131,7 @@ export function ProductsManager() {
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{product.description}</p>
                     <div className="flex items-center gap-4 text-sm">
-                      <span className="font-medium text-foreground">${(product.priceCents / 100).toFixed(2)}</span>
+                      <span className="font-medium text-foreground">${(product.price_cents / 100).toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

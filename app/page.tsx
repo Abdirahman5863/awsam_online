@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowRight, Store, Palette, BarChart3, Zap, Globe } from "lucide-react"
+import { ArrowRight, Palette, BarChart3, Zap, Globe } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function LandingPage() {
   return (
@@ -11,9 +12,13 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-4">
           <nav className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                <Store className="w-5 h-5 text-accent-foreground" />
-              </div>
+              <Image
+                src="/ChatGPT Image Sep 25, 2025, 02_23_12 PM.png"
+                alt="Awsam.online Logo"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
               <span className="text-xl font-bold text-foreground">Awsam.online</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -227,9 +232,13 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                  <Store className="w-5 h-5 text-accent-foreground" />
-                </div>
+                <Image
+                  src="/ChatGPT Image Sep 25, 2025, 02_23_12 PM.png"
+                  alt="Awsam.online Logo"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
                 <span className="text-xl font-bold">Awsam.online</span>
               </div>
               <p className="text-sm text-muted-foreground">The easiest way to create beautiful storefronts for WhatsApp and social media sales.</p>
