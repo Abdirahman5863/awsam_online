@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowRight, Palette, BarChart3, Zap, Globe } from "lucide-react"
+import { ArrowRight, Palette, ChartBar as BarChart3, Zap, Globe } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 

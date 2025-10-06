@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Plus, Search, Filter, MoreHorizontal, Edit, Trash2, Eye, Loader2 } from "lucide-react"
+import { Plus, Search, Filter, MoveHorizontal as MoreHorizontal, CreditCard as Edit, Trash2, Eye, Loader as Loader2 } from "lucide-react"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 export function ProductsManager() {
