@@ -25,7 +25,7 @@ export default function LoginPage() {
             <CardTitle className="text-2xl">Welcome back</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <SignIn />
+            <SignIn routing="hash" />
           </CardContent>
         </Card>
       </div>

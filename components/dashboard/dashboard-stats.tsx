@@ -3,13 +3,7 @@ import { TrendingUp, DollarSign, ShoppingBag, Users } from "lucide-react"
 
 export function DashboardStats() {
   const stats = [
-    {
-      title: "Total Revenue",
-      value: "$12,450",
-      change: "+12.5%",
-      icon: DollarSign,
-      trend: "up",
-    },
+
     {
       title: "Orders",
       value: "156",
@@ -17,20 +11,7 @@ export function DashboardStats() {
       icon: ShoppingBag,
       trend: "up",
     },
-    {
-      title: "Visitors",
-      value: "2,847",
-      change: "+23.1%",
-      icon: Users,
-      trend: "up",
-    },
-    {
-      title: "Conversion Rate",
-      value: "5.4%",
-      change: "+2.1%",
-      icon: TrendingUp,
-      trend: "up",
-    },
+  
   ]
 
   return (
