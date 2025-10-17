@@ -31,9 +31,7 @@ export default function LandingPage() {
             <Link href="#pricing" className="hover:text-foreground transition-colors">
               Pricing
             </Link>
-            <Link href="#contact" className="hover:text-foreground transition-colors">
-              Contact
-            </Link>
+            
           </nav>
 
           <div className="flex items-center gap-3">
@@ -83,7 +81,7 @@ export default function LandingPage() {
           >
             <Card className="relative p-4 w-full max-w-3xl shadow-lg bg-background border-border/60">
               <Image
-                src="/storefront-preview.png"
+                src="/preview.png"
                 alt="Awsam Storefront Preview"
                 width={1000}
                 height={600}
@@ -147,10 +145,10 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <PricingCard
               plan="Free"
-              price="$0"
+              price="Ksh 0"
               desc="Perfect for getting started"
               features={[
-                "3 products",
+                "5 products",
                 "Custom store link",
                 "WhatsApp integration",
                 "Mobile responsive",
@@ -160,17 +158,21 @@ export default function LandingPage() {
             />
             <PricingCard
               plan="Pro"
-              price="$10/mo"
+              price="Ksh 500/mo"
               desc="For growing brands"
               highlight
               features={[
                 "Unlimited products",
-                "Custom branding",
+                "WhatsApp integration",
+                "Mobile responsive",
+                "Custom store link",
+              
                 "Advanced analytics",
                 "Priority support",
               ]}
               buttonText="Start Pro Trial"
               href="/sign-up"
+           
             />
           </div>
         </div>
